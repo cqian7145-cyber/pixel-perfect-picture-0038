@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# 同一分支只保留最新一次运行，避免排队浪费额度
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: lint / typecheck / test / build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # bun.lock 是本仓库唯一的锁文件，CI 与本地都按它安装
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Guard against tracked secrets
+        # 只允许提交 .env.example；任何真实 .env / 证书都不应进入仓库
+        run: |
+          set -euo pipefail
+          tracked="$(git ls-files | grep -Ei '(^|/)\.env($|\.)|\.pem$|\.p12$|\.pfx$|(^|/)secrets\.json$' || true)"
+          if [ -n "$tracked" ]; then
+            echo "::error::检测到可能包含密钥的文件被提交："
+            echo "$tracked"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Test
+        run: bun run test
+
+      - name: Build
+        run: bun run build

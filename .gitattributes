@@ -1,0 +1,18 @@
+# 统一换行符：仓库内一律 LF，避免 Windows 检出（core.autocrlf=true）后
+# prettier/prettier 在 lint 阶段报出成千上万条 "Delete ␍"。
+* text=auto eol=lf
+
+# 二进制文件不做换行符转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+
+# 生成文件：标记为生成物，减少 diff 噪音
+src/routeTree.gen.ts linguist-generated=true
+bun.lock text eol=lf

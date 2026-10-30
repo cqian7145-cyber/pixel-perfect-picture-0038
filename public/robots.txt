@@ -1,14 +1,7 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
 User-agent: *
 Allow: /
+# 商家后台与个人内容页不属于公开站点内容。
+# 注意：robots.txt 只是爬虫约定，不是访问控制；真正的权限由应用鉴权负责。
+Disallow: /studio
+Disallow: /studio/
+Disallow: /account/

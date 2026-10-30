@@ -37,4 +37,11 @@ export default tseslint.config(
     },
   },
   eslintPluginPrettier,
+  {
+    rules: {
+      // 格式问题交给 `bun run format` 自动修复，只作提示：
+      // Lovable / v0 等平台生成的代码风格不同，不应因空白差异阻塞合并。
+      "prettier/prettier": "warn",
+    },
+  },
 );
