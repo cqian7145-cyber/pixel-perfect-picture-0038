@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # bun.lock 是本仓库唯一的锁文件，CI 与本地都按它安装
       - name: Setup Bun
