@@ -10,33 +10,103 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MVenueSlugIndexRouteImport } from './routes/m.$venueSlug.index'
+import { Route as MVenueSlugLettersRouteImport } from './routes/m.$venueSlug.letters'
+import { Route as MVenueSlugWriteRouteImport } from './routes/m.$venueSlug.write'
+import { Route as MVenueSlugStoriesIndexRouteImport } from './routes/m.$venueSlug.stories.index'
+import { Route as MVenueSlugStoriesStoryIdRouteImport } from './routes/m.$venueSlug.stories.$storyId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MVenueSlugIndexRoute = MVenueSlugIndexRouteImport.update({
+  id: '/m/$venueSlug/',
+  path: '/m/$venueSlug/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MVenueSlugLettersRoute = MVenueSlugLettersRouteImport.update({
+  id: '/m/$venueSlug/letters',
+  path: '/m/$venueSlug/letters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MVenueSlugWriteRoute = MVenueSlugWriteRouteImport.update({
+  id: '/m/$venueSlug/write',
+  path: '/m/$venueSlug/write',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MVenueSlugStoriesIndexRoute = MVenueSlugStoriesIndexRouteImport.update({
+  id: '/m/$venueSlug/stories/',
+  path: '/m/$venueSlug/stories/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MVenueSlugStoriesStoryIdRoute =
+  MVenueSlugStoriesStoryIdRouteImport.update({
+    id: '/m/$venueSlug/stories/$storyId',
+    path: '/m/$venueSlug/stories/$storyId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
+  '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
+  '/m/$venueSlug/': typeof MVenueSlugIndexRoute
+  '/m/$venueSlug/stories/$storyId': typeof MVenueSlugStoriesStoryIdRoute
+  '/m/$venueSlug/stories/': typeof MVenueSlugStoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
+  '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
+  '/m/$venueSlug': typeof MVenueSlugIndexRoute
+  '/m/$venueSlug/stories/$storyId': typeof MVenueSlugStoriesStoryIdRoute
+  '/m/$venueSlug/stories': typeof MVenueSlugStoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
+  '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
+  '/m/$venueSlug/': typeof MVenueSlugIndexRoute
+  '/m/$venueSlug/stories/$storyId': typeof MVenueSlugStoriesStoryIdRoute
+  '/m/$venueSlug/stories/': typeof MVenueSlugStoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/m/$venueSlug/letters'
+    | '/m/$venueSlug/write'
+    | '/m/$venueSlug/'
+    | '/m/$venueSlug/stories/$storyId'
+    | '/m/$venueSlug/stories/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/m/$venueSlug/letters'
+    | '/m/$venueSlug/write'
+    | '/m/$venueSlug'
+    | '/m/$venueSlug/stories/$storyId'
+    | '/m/$venueSlug/stories'
+  id:
+    | '__root__'
+    | '/'
+    | '/m/$venueSlug/letters'
+    | '/m/$venueSlug/write'
+    | '/m/$venueSlug/'
+    | '/m/$venueSlug/stories/$storyId'
+    | '/m/$venueSlug/stories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MVenueSlugLettersRoute: typeof MVenueSlugLettersRoute
+  MVenueSlugWriteRoute: typeof MVenueSlugWriteRoute
+  MVenueSlugIndexRoute: typeof MVenueSlugIndexRoute
+  MVenueSlugStoriesStoryIdRoute: typeof MVenueSlugStoriesStoryIdRoute
+  MVenueSlugStoriesIndexRoute: typeof MVenueSlugStoriesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +118,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/m/$venueSlug/': {
+      id: '/m/$venueSlug/'
+      path: '/m/$venueSlug'
+      fullPath: '/m/$venueSlug/'
+      preLoaderRoute: typeof MVenueSlugIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$venueSlug/letters': {
+      id: '/m/$venueSlug/letters'
+      path: '/m/$venueSlug/letters'
+      fullPath: '/m/$venueSlug/letters'
+      preLoaderRoute: typeof MVenueSlugLettersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$venueSlug/write': {
+      id: '/m/$venueSlug/write'
+      path: '/m/$venueSlug/write'
+      fullPath: '/m/$venueSlug/write'
+      preLoaderRoute: typeof MVenueSlugWriteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$venueSlug/stories/': {
+      id: '/m/$venueSlug/stories/'
+      path: '/m/$venueSlug/stories'
+      fullPath: '/m/$venueSlug/stories/'
+      preLoaderRoute: typeof MVenueSlugStoriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$venueSlug/stories/$storyId': {
+      id: '/m/$venueSlug/stories/$storyId'
+      path: '/m/$venueSlug/stories/$storyId'
+      fullPath: '/m/$venueSlug/stories/$storyId'
+      preLoaderRoute: typeof MVenueSlugStoriesStoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MVenueSlugLettersRoute: MVenueSlugLettersRoute,
+  MVenueSlugWriteRoute: MVenueSlugWriteRoute,
+  MVenueSlugIndexRoute: MVenueSlugIndexRoute,
+  MVenueSlugStoriesStoryIdRoute: MVenueSlugStoriesStoryIdRoute,
+  MVenueSlugStoriesIndexRoute: MVenueSlugStoriesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
