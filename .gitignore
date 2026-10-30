@@ -16,6 +16,30 @@ dist-ssr
 .nitro
 *.local
 
+# Environment / secrets
+# 本地环境变量一律不入库，只提交 .env.example（示例值，不含真实凭据）
+.env
+.env.*
+!.env.example
+.envrc
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+
+# Local package-manager config (registry mirror, tokens)
+.npmrc
+.yarnrc
+.yarnrc.yml
+
+# Test / build artifacts
+coverage
+coverage.xml
+junit.xml
+*.tsbuildinfo
+test-results
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
