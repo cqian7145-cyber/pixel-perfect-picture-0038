@@ -10,9 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StudioRouteImport } from './routes/studio'
+import { Route as AccountMemoriesRouteImport } from './routes/account.memories'
+import { Route as StudioIndexRouteImport } from './routes/studio.index'
+import { Route as StudioCurationRouteImport } from './routes/studio.curation'
+import { Route as StudioReviewRouteImport } from './routes/studio.review'
+import { Route as StudioSettingsRouteImport } from './routes/studio.settings'
 import { Route as MVenueSlugIndexRouteImport } from './routes/m.$venueSlug.index'
 import { Route as MVenueSlugLettersRouteImport } from './routes/m.$venueSlug.letters'
 import { Route as MVenueSlugWriteRouteImport } from './routes/m.$venueSlug.write'
+import { Route as MVenueSlugExperiencesTypeRouteImport } from './routes/m.$venueSlug.experiences.$type'
 import { Route as MVenueSlugStoriesIndexRouteImport } from './routes/m.$venueSlug.stories.index'
 import { Route as MVenueSlugStoriesStoryIdRouteImport } from './routes/m.$venueSlug.stories.$storyId'
 
@@ -20,6 +27,36 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountMemoriesRoute = AccountMemoriesRouteImport.update({
+  id: '/account/memories',
+  path: '/account/memories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioCurationRoute = StudioCurationRouteImport.update({
+  id: '/curation',
+  path: '/curation',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReviewRoute = StudioReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
 } as any)
 const MVenueSlugIndexRoute = MVenueSlugIndexRouteImport.update({
   id: '/m/$venueSlug/',
@@ -36,6 +73,12 @@ const MVenueSlugWriteRoute = MVenueSlugWriteRouteImport.update({
   path: '/m/$venueSlug/write',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MVenueSlugExperiencesTypeRoute =
+  MVenueSlugExperiencesTypeRouteImport.update({
+    id: '/m/$venueSlug/experiences/$type',
+    path: '/m/$venueSlug/experiences/$type',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MVenueSlugStoriesIndexRoute = MVenueSlugStoriesIndexRouteImport.update({
   id: '/m/$venueSlug/stories/',
   path: '/m/$venueSlug/stories/',
@@ -50,26 +93,46 @@ const MVenueSlugStoriesStoryIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/account/memories': typeof AccountMemoriesRoute
+  '/studio/curation': typeof StudioCurationRoute
+  '/studio/review': typeof StudioReviewRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/': typeof StudioIndexRoute
   '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
   '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
   '/m/$venueSlug/': typeof MVenueSlugIndexRoute
+  '/m/$venueSlug/experiences/$type': typeof MVenueSlugExperiencesTypeRoute
   '/m/$venueSlug/stories/$storyId': typeof MVenueSlugStoriesStoryIdRoute
   '/m/$venueSlug/stories/': typeof MVenueSlugStoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account/memories': typeof AccountMemoriesRoute
+  '/studio/curation': typeof StudioCurationRoute
+  '/studio/review': typeof StudioReviewRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio': typeof StudioIndexRoute
   '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
   '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
   '/m/$venueSlug': typeof MVenueSlugIndexRoute
+  '/m/$venueSlug/experiences/$type': typeof MVenueSlugExperiencesTypeRoute
   '/m/$venueSlug/stories/$storyId': typeof MVenueSlugStoriesStoryIdRoute
   '/m/$venueSlug/stories': typeof MVenueSlugStoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/account/memories': typeof AccountMemoriesRoute
+  '/studio/curation': typeof StudioCurationRoute
+  '/studio/review': typeof StudioReviewRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/': typeof StudioIndexRoute
   '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
   '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
   '/m/$venueSlug/': typeof MVenueSlugIndexRoute
+  '/m/$venueSlug/experiences/$type': typeof MVenueSlugExperiencesTypeRoute
   '/m/$venueSlug/stories/$storyId': typeof MVenueSlugStoriesStoryIdRoute
   '/m/$venueSlug/stories/': typeof MVenueSlugStoriesIndexRoute
 }
@@ -77,34 +140,57 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/studio'
+    | '/account/memories'
+    | '/studio/curation'
+    | '/studio/review'
+    | '/studio/settings'
+    | '/studio/'
     | '/m/$venueSlug/letters'
     | '/m/$venueSlug/write'
     | '/m/$venueSlug/'
+    | '/m/$venueSlug/experiences/$type'
     | '/m/$venueSlug/stories/$storyId'
     | '/m/$venueSlug/stories/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account/memories'
+    | '/studio/curation'
+    | '/studio/review'
+    | '/studio/settings'
+    | '/studio'
     | '/m/$venueSlug/letters'
     | '/m/$venueSlug/write'
     | '/m/$venueSlug'
+    | '/m/$venueSlug/experiences/$type'
     | '/m/$venueSlug/stories/$storyId'
     | '/m/$venueSlug/stories'
   id:
     | '__root__'
     | '/'
+    | '/studio'
+    | '/account/memories'
+    | '/studio/curation'
+    | '/studio/review'
+    | '/studio/settings'
+    | '/studio/'
     | '/m/$venueSlug/letters'
     | '/m/$venueSlug/write'
     | '/m/$venueSlug/'
+    | '/m/$venueSlug/experiences/$type'
     | '/m/$venueSlug/stories/$storyId'
     | '/m/$venueSlug/stories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  AccountMemoriesRoute: typeof AccountMemoriesRoute
   MVenueSlugLettersRoute: typeof MVenueSlugLettersRoute
   MVenueSlugWriteRoute: typeof MVenueSlugWriteRoute
   MVenueSlugIndexRoute: typeof MVenueSlugIndexRoute
+  MVenueSlugExperiencesTypeRoute: typeof MVenueSlugExperiencesTypeRoute
   MVenueSlugStoriesStoryIdRoute: typeof MVenueSlugStoriesStoryIdRoute
   MVenueSlugStoriesIndexRoute: typeof MVenueSlugStoriesIndexRoute
 }
@@ -117,6 +203,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/memories': {
+      id: '/account/memories'
+      path: '/account/memories'
+      fullPath: '/account/memories'
+      preLoaderRoute: typeof AccountMemoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/curation': {
+      id: '/studio/curation'
+      path: '/curation'
+      fullPath: '/studio/curation'
+      preLoaderRoute: typeof StudioCurationRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/review': {
+      id: '/studio/review'
+      path: '/review'
+      fullPath: '/studio/review'
+      preLoaderRoute: typeof StudioReviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
     }
     '/m/$venueSlug/': {
       id: '/m/$venueSlug/'
@@ -139,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MVenueSlugWriteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/m/$venueSlug/experiences/$type': {
+      id: '/m/$venueSlug/experiences/$type'
+      path: '/m/$venueSlug/experiences/$type'
+      fullPath: '/m/$venueSlug/experiences/$type'
+      preLoaderRoute: typeof MVenueSlugExperiencesTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/m/$venueSlug/stories/': {
       id: '/m/$venueSlug/stories/'
       path: '/m/$venueSlug/stories'
@@ -156,11 +291,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface StudioRouteChildren {
+  StudioCurationRoute: typeof StudioCurationRoute
+  StudioReviewRoute: typeof StudioReviewRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioCurationRoute: StudioCurationRoute,
+  StudioReviewRoute: StudioReviewRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StudioRoute: StudioRouteWithChildren,
+  AccountMemoriesRoute: AccountMemoriesRoute,
   MVenueSlugLettersRoute: MVenueSlugLettersRoute,
   MVenueSlugWriteRoute: MVenueSlugWriteRoute,
   MVenueSlugIndexRoute: MVenueSlugIndexRoute,
+  MVenueSlugExperiencesTypeRoute: MVenueSlugExperiencesTypeRoute,
   MVenueSlugStoriesStoryIdRoute: MVenueSlugStoriesStoryIdRoute,
   MVenueSlugStoriesIndexRoute: MVenueSlugStoriesIndexRoute,
 }
