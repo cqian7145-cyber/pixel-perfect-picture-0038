@@ -30,10 +30,12 @@ jobs:
           bun-version: 1.2.23
 
       - name: Guard against tracked secrets
-        # 只允许提交 .env.example；任何真实 .env / 证书都不应进入仓库
+        # 只允许提交 .env.example；任何真实 .env / 证书 / 密钥文件都不应进入仓库
         run: |
           set -euo pipefail
-          tracked="$(git ls-files | grep -Ei '(^|/)\.env($|\.)|\.pem$|\.p12$|\.pfx$|(^|/)secrets\.json$' || true)"
+          tracked="$(git ls-files \
+            | grep -Ei '(^|/)\.env|\.pem$|\.p12$|\.pfx$|(^|/)secrets\.json$' \
+            | grep -v '\.env\.example$' || true)"
           if [ -n "$tracked" ]; then
             echo "::error::检测到可能包含密钥的文件被提交："
             echo "$tracked"
