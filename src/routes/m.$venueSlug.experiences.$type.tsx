@@ -48,7 +48,7 @@ function TimePost() {
 
 function TableStory() {
   const [table, setTable] = useState<number | null>(null);
-  const stories: Record<number, string> = { 1: "这里求过一次婚（演示）。她答应了，然后两个人都哭了。", 3: DEMO_STORIES[0].excerpt, 5: "常客老周每周五都坐这里，点同一杯金汤力（演示）。" };
+  const stories: Record<number, string> = { 1: "这里求过一次婚（演示）。她答应了，然后两个人都哭了。", 3: DEMO_STORIES[0]!.excerpt, 5: "常客老周每周五都坐这里，点同一杯金汤力（演示）。" };
   return (
     <div>
       <p className="text-sm text-muted-foreground">选择一张桌子（模拟扫桌码）：</p>
@@ -83,7 +83,7 @@ function Screening() {
   return (
     <div>
       <div className="flex aspect-video items-center justify-center rounded-xl border border-border bg-background p-6 text-center">
-        <p key={i} className="fade-up font-serif text-xl leading-9">“{items[i].content}”<br /><span className="text-sm text-muted-foreground">—— {items[i].penName}</span></p>
+        <p key={i} className="fade-up font-serif text-xl leading-9">“{items[i]?.content}”<br /><span className="text-sm text-muted-foreground">—— {items[i]?.penName}</span></p>
       </div>
       <div className="mt-4 flex gap-3"><Btn variant="primary" onClick={() => setPlaying(!playing)}>{playing ? "暂停" : "开始放映"}</Btn><Btn variant="ghost" onClick={() => setI((i + 1) % items.length)}>下一条</Btn></div>
       <p className="mt-2 text-xs text-muted-foreground">只轮播已审核且授权公开展示的内容。</p>
@@ -97,12 +97,12 @@ function Timeline() {
 }
 
 function CityWalk() {
-  const stops = [["南明河", "河边的风把散场的人吹得很慢。"], ["甲秀楼", DEMO_STORIES[3].excerpt], ["青云路", "凌晨两点，烧烤摊还在。"], ["回到小馆", "灯还亮着。"]];
+  const stops = [["南明河", "河边的风把散场的人吹得很慢。"], ["甲秀楼", DEMO_STORIES[3]!.excerpt], ["青云路", "凌晨两点，烧烤摊还在。"], ["回到小馆", "灯还亮着。"]];
   const [i, setI] = useState(0);
   return (
     <div>
       <div className="flex gap-1">{stops.map((_, k) => <span key={k} className={`h-1 flex-1 rounded-full ${k <= i ? "bg-warm" : "bg-muted"}`} />)}</div>
-      <div key={i} className="paper-card fade-up mt-5 p-6"><p className="text-xs text-paper-muted">第 {i + 1} 站</p><p className="mt-1 font-serif text-xl">{stops[i][0]}</p><p className="mt-3 font-serif leading-7">{stops[i][1]}</p></div>
+      <div key={i} className="paper-card fade-up mt-5 p-6"><p className="text-xs text-paper-muted">第 {i + 1} 站</p><p className="mt-1 font-serif text-xl">{stops[i]![0]}</p><p className="mt-3 font-serif leading-7">{stops[i]![1]}</p></div>
       <div className="mt-4 flex gap-3"><Btn variant="ghost" disabled={i === 0} onClick={() => setI(i - 1)}>上一站</Btn><Btn variant="warm" disabled={i === stops.length - 1} onClick={() => setI(i + 1)}>下一站</Btn></div>
       <p className="mt-2 text-xs text-muted-foreground">不使用定位，不显示他人位置。</p>
     </div>
