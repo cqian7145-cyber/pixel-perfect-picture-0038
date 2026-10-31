@@ -56,7 +56,7 @@ class MockMemoriesRepository implements MemoriesRepository {
   }
   async drawLetter(slug: string) {
     const all = await this.listApproved(slug, "letter");
-    return all.length ? all[Math.floor(Math.random() * all.length)] : null;
+    return all[Math.floor(Math.random() * all.length)] ?? null;
   }
   async submit(input: NewSubmission) {
     const err = validateSubmission(input);
@@ -71,7 +71,7 @@ class MockMemoriesRepository implements MemoriesRepository {
   async listForReview(slug: string) { return delay(load().submissions.filter((s) => s.venueSlug === slug)); }
   async review(id: string, status: "approved" | "rejected", reason?: string) {
     const st = load(); const s = st.submissions.find((x) => x.id === id);
-    if (s && s.status !== "withdrawn") { s.status = status; s.rejectReason = reason; }
+    if (s && s.status !== "withdrawn") { s.status = status; if (reason) s.rejectReason = reason; else delete s.rejectReason; }
     save(st); return delay(undefined);
   }
   async setFeatured(storyId: string, featured: boolean) { const st = load(); st.featured[storyId] = featured; save(st); return delay(undefined); }
