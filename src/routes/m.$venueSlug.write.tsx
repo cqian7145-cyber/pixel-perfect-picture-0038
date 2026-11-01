@@ -13,7 +13,8 @@ function Write() {
   const notes = useLoad(() => repo.listApproved(venueSlug, "note"), [venueSlug]);
   return (
     <CustomerShell slug={venueSlug} title="今夜留一句">
-      <h1 className="text-2xl">今夜，你想留下什么？</h1>
+      <p className="mb-3 text-xs text-warm">A NOTE FOR TONIGHT</p>
+      <h1 className="text-3xl">今夜，你想留下什么？</h1>
       <p className="mt-2 text-sm text-muted-foreground">一句就好。无需登录，审核通过后挂上记忆墙。</p>
       <div className="mt-6"><SubmitForm slug={venueSlug} kind="note" placeholder="比如：今天的风有点甜。" /></div>
       <h2 className="mt-10 text-lg">记忆墙</h2>

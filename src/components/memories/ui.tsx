@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode, type ButtonHTMLAttributes } from "react";
+import { ArrowLeft, Bookmark, Moon } from "lucide-react";
 import type { ReviewStatus } from "@/lib/memories/types";
 
 export function useLoad<T>(fn: () => Promise<T>, deps: unknown[]) {
@@ -40,13 +41,13 @@ export function CustomerShell({ slug, title, children, back = true }: { slug: st
       <header className="sticky top-0 z-10 border-b border-border bg-background/90">
         <div className="mx-auto flex h-14 max-w-xl items-center gap-3 px-4">
           {back ? (
-            <Link to="/m/$venueSlug" params={{ venueSlug: slug }} className="-ml-2 flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground" aria-label="返回记忆馆">←</Link>
-          ) : <span className="font-serif text-lg">☾</span>}
+             <Link to="/m/$venueSlug" params={{ venueSlug: slug }} className="-ml-2 flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground" aria-label="返回记忆馆"><ArrowLeft size={20} /></Link>
+           ) : <Moon size={20} className="text-warm" />}
           <span className="font-serif text-base">{title ?? "Moonlight Memories"}</span>
-          <Link to="/account/memories" className="ml-auto text-sm text-muted-foreground hover:text-foreground">我的记忆</Link>
+           <Link to="/account/memories" className="ml-auto flex min-h-11 items-center gap-2 text-sm text-muted-foreground hover:text-foreground"><Bookmark size={16} />我的记忆</Link>
         </div>
       </header>
-      <main className="mx-auto max-w-xl px-4 pb-16 pt-6">{children}</main>
+       <main className="mx-auto max-w-xl px-5 pb-16 pt-8 fade-up">{children}</main>
     </div>
   );
 }
@@ -60,7 +61,7 @@ export function ErrorNote({ msg, onRetry }: { msg: string; onRetry?: () => void 
   );
 }
 
-export function Btn({ variant = "primary", className = "", ...p }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "warm" | "ghost" | "danger" }) {
+export function Btn({ variant = "primary", className = "", ...p }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "warm" | "ghost" | "danger" }) {
   const v = {
     primary: "bg-primary text-primary-foreground hover:bg-primary/90",
     warm: "bg-warm text-warm-foreground hover:bg-warm/90",

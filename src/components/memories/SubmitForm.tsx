@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import { Mail, Send } from "lucide-react";
 import { MAX_LENGTH, repo, validateSubmission } from "@/lib/memories/repository";
 import type { Submission } from "@/lib/memories/types";
 import { Btn, StatusBadge } from "./ui";
@@ -11,7 +12,7 @@ export function SubmitForm({ slug, kind, placeholder, onDone }: { slug: string; 
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<Submission | null>(null);
 
-  async function submit(e: React.FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
     const input = { venueSlug: slug, kind, content, penName, consentPublicDisplay: consent };
     const err = validateSubmission(input);
@@ -27,12 +28,13 @@ export function SubmitForm({ slug, kind, placeholder, onDone }: { slug: string; 
       <div className="flex items-center justify-between"><p className="font-serif text-lg">已投进信箱</p><StatusBadge status="pending" /></div>
       <p className="mt-3 leading-7">“{done.content}”</p>
       <p className="mt-4 text-sm text-paper-muted">店主审核通过后才会公开展示。你可以在「我的记忆」中查看状态或随时撤回。</p>
-      <button className="mt-4 text-sm underline" onClick={() => { setDone(null); setContent(""); setConsent(false); }}>再写一句</button>
+      <Btn variant="ghost" className="mt-4" onClick={() => { setDone(null); setContent(""); setConsent(false); }}>再写一句</Btn>
     </div>
   );
 
   return (
-    <form onSubmit={submit} className="paper-card p-5">
+    <form onSubmit={submit} className="paper-card p-6 md:p-8">
+      <div className="mb-5 flex items-center justify-between border-b border-paper-text/15 pb-4 text-paper-muted"><span className="font-serif text-sm">Moonlight · {kind === "letter" ? "一封来信" : "今夜留一句"}</span><Mail size={22} strokeWidth={1} /></div>
       <label className="sr-only" htmlFor="content">内容</label>
       <textarea id="content" value={content} onChange={(e) => setContent(e.target.value)} placeholder={placeholder} rows={5} maxLength={MAX_LENGTH + 20}
         className="w-full resize-none bg-transparent font-serif text-lg leading-7 placeholder:text-paper-muted focus:outline-none" />
@@ -45,7 +47,7 @@ export function SubmitForm({ slug, kind, placeholder, onDone }: { slug: string; 
       </label>
       <p className="mt-2 text-xs text-paper-muted">请勿留下联系方式、真实姓名或他人隐私。</p>
       {error && <p role="alert" className="mt-3 text-sm text-destructive">{error}</p>}
-      <Btn variant="primary" type="submit" disabled={busy} className="mt-4 w-full">{busy ? "投递中…" : "投进信箱"}</Btn>
+      <Btn variant="primary" type="submit" disabled={busy} className="mt-5 w-full !rounded-md"><Send size={16} className="mr-2" />{busy ? "投递中…" : "投进信箱"}</Btn>
     </form>
   );
 }

@@ -18,7 +18,7 @@ function StoryPage() {
         <article className="paper-card fade-up p-6">
           <div className="flex justify-between text-xs text-paper-muted"><span>{data.date}</span>{data.isDemo && <span>演示内容</span>}</div>
           <h1 className="mt-3 text-2xl">{data.title}</h1>
-          <div className="mt-5 space-y-4 font-serif leading-8">{data.body.map((p, i) => <p key={i}>{p}</p>)}</div>
+          <div className="mt-7 space-y-5 font-serif text-lg leading-9">{data.body.map((p, i) => <p key={i}>{p}</p>)}</div>
           <p className="mt-6 text-right text-sm text-paper-muted">—— {data.author}</p>
           <div className="mt-4 flex flex-wrap gap-2">{data.tags.map((t) => <span key={t} className="rounded-full border border-paper-text/20 px-2 py-0.5 text-xs">{t}</span>)}</div>
         </article>

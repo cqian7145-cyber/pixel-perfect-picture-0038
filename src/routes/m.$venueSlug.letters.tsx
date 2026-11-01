@@ -11,7 +11,8 @@ function Letters() {
   const { venueSlug } = Route.useParams();
   return (
     <CustomerShell slug={venueSlug} title="留给下一位">
-      <h1 className="text-2xl">写给下一位陌生人</h1>
+      <p className="mb-3 text-xs text-warm">LETTERS TO THE NEXT GUEST</p>
+      <h1 className="text-3xl">写给下一位陌生人</h1>
       <p className="mt-2 text-sm text-muted-foreground">你不会知道是谁读到它，对方也不会知道你是谁。信件匿名，不支持回复或私信。</p>
       <div className="mt-6"><SubmitForm slug={venueSlug} kind="letter" placeholder="给下一位坐在这里的人：" /></div>
     </CustomerShell>
