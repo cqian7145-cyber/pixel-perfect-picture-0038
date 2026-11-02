@@ -53,7 +53,7 @@ export function VenueHome({ venueSlug }: { venueSlug: string }) {
       </section>
       <main className="relative mx-auto -mt-16 max-w-5xl px-5 pb-16 md:px-10">
         <div className="grid grid-cols-2 gap-3 md:gap-5">
-          <Btn onClick={draw} disabled={opening} variant="ghost" className="paper-card primary-paper !items-start !justify-between !rounded-lg !border-0 !p-5 !text-left">
+          <Btn aria-label="读一封过去的来信" onClick={draw} disabled={opening} variant="ghost" className="paper-card primary-paper !items-start !justify-between !rounded-lg !border-0 !p-5 !text-left !text-paper-text">
             <span><Mail className="mb-4 text-paper-muted" size={28} strokeWidth={1} /><span className="block font-serif text-lg md:text-2xl">读一封<br />过去的来信</span><span className="mt-3 block text-sm font-normal leading-6 text-paper-muted">陌生人的心话，<br />或许正好说给你听。</span></span><ArrowRight size={19} className="self-end" />
           </Btn>
           <Link to="/m/$venueSlug/write" params={{ venueSlug }} className="paper-card primary-paper p-5">
