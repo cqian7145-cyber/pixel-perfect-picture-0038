@@ -1,5 +1,7 @@
 # Moonlight Memories roadmap
 
+- [ ] Read uploaded V3.3 requirements and update remaining scope without discarding current visual work.
+
 - [x] Review uploaded Moonlight 3.0 / Timeleft / Fever document: treat as a proposed future extension, not approval to replace V1.1 or access another project.
 - [x] Baseline wait explicitly waived by user on 2026-11-01; proceed without merging or modifying Git history.
 - [ ] Implement first Style C batch: home, note form, letters and story reading; preserve mock business interfaces.
