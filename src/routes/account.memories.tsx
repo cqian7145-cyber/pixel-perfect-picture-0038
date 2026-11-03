@@ -30,10 +30,15 @@ function Mine() {
 
 function MineList({ onSignOut }: { onSignOut: () => void }) {
   const { data, error, reload } = useLoad(() => repo.listMine(), []);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   if (error) return <ErrorNote msg={error} onRetry={reload} />;
   if (!data) return <Loading />;
   return (
     <div className="mt-6">
+      <p className="mb-4 text-sm text-muted-foreground">本设备记录 · 同一浏览器的使用者可查看，不是正式账号空间。</p>
+      {actionError && <ErrorNote msg={actionError} />}
       {data.length === 0 ? <p className="py-10 text-center text-muted-foreground">你还没有留下记忆。</p> : (
         <ul className="space-y-4">{data.map((s) => (
           <li key={s.id} className="paper-card p-5">
@@ -41,7 +46,7 @@ function MineList({ onSignOut }: { onSignOut: () => void }) {
             <p className="mt-3 font-serif leading-7">{s.content}</p>
             {s.status === "rejected" && s.rejectReason && <p className="mt-2 text-sm text-paper-muted">未通过原因：{s.rejectReason}</p>}
             <p className="mt-2 text-xs text-paper-muted">授权：仅本店记忆馆匿名展示 · 不含商业广告</p>
-            {(s.status === "pending" || s.status === "approved") && <button className="mt-3 min-h-11 text-sm underline" onClick={async () => { await repo.withdraw(s.id); reload(); }}>撤回</button>}
+            {s.status !== "withdrawn" && (confirmId === s.id ? <div className="mt-4"><p className="text-sm text-paper-muted">撤回后不再公开展示，且无法恢复。确定撤回？</p><div className="mt-3 flex gap-2"><Btn variant="danger" disabled={busy} onClick={async () => { setBusy(true); setActionError(null); try { await repo.withdraw(s.id); setConfirmId(null); reload(); } catch (e) { setActionError(e instanceof Error ? e.message : "撤回失败，请重试。"); } finally { setBusy(false); } }}>{busy ? "撤回中…" : "确定撤回"}</Btn><Btn variant="ghost" disabled={busy} onClick={() => setConfirmId(null)}>保留</Btn></div></div> : <Btn variant="ghost" className="mt-3" onClick={() => setConfirmId(s.id)}>撤回</Btn>)}
           </li>
         ))}</ul>
       )}
