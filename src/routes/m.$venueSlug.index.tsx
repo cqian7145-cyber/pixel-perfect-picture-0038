@@ -25,8 +25,9 @@ export function VenueHome({ venueSlug }: { venueSlug: string }) {
   const [opening, setOpening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   async function draw() {
+    if (opening) return;
     setOpening(true); setError(null);
-    try { setLetter(await repo.drawLetter(venueSlug)); }
+    try { setLetter(await repo.drawLetter(venueSlug, letter?.id)); }
     catch (e) { setError(e instanceof Error ? e.message : "来信暂时没有送达，请重试。"); }
     finally { setOpening(false); }
   }
@@ -45,7 +46,7 @@ export function VenueHome({ venueSlug }: { venueSlug: string }) {
           </header>
           <div className="cover-title fade-up">
             <p className="mb-3 text-sm text-warm">GUIYANG · NIGHT STORIES</p>
-            <h1 className="font-serif text-3xl md:text-5xl">{v.city} · {v.isDemo ? "夜诗酒馆" : v.name}</h1>
+            <h1 className="font-serif text-3xl md:text-5xl">{v.city} · {v.name.replace(/（演示）$/, "")}</h1>
             <p className="mt-4 font-serif text-base leading-7 text-foreground/90">{v.tagline}</p>
             <span className="mt-4 inline-block text-xs text-foreground/70">{v.isDemo && "门店与背景影像均为演示素材"}</span>
           </div>
