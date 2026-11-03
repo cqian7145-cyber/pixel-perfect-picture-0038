@@ -9,6 +9,7 @@ export function useLoad<T>(fn: () => Promise<T>, deps: unknown[]) {
   const [tick, setTick] = useState(0);
   useEffect(() => {
     let alive = true;
+    setData(undefined);
     setError(null);
     fn().then((d) => alive && setData(d)).catch((e) => alive && setError(String(e?.message ?? e)));
     return () => { alive = false; };
@@ -56,7 +57,7 @@ export function Loading() { return <p className="py-12 text-center text-sm text-
 export function ErrorNote({ msg, onRetry }: { msg: string; onRetry?: () => void }) {
   return (
     <div className="rounded-lg border border-destructive/40 p-4 text-sm text-destructive">
-      {msg} {onRetry && <button onClick={onRetry} className="ml-2 underline">重试</button>}
+      {msg} {onRetry && <Btn variant="ghost" onClick={onRetry} className="ml-2">重试</Btn>}
     </div>
   );
 }

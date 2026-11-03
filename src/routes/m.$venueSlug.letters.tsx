@@ -3,7 +3,7 @@ import { SubmitForm } from "@/components/memories/SubmitForm";
 import { CustomerShell } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/m/$venueSlug/letters")({
-  head: () => ({ meta: [{ title: "留给下一位 · Moonlight Memories" }, { name: "description", content: "写一封信，给下一位来到这里的陌生人。" }, { property: "og:title", content: "留给下一位" }, { property: "og:description", content: "写一封信，给下一位来到这里的陌生人。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "留给下一位 · Moonlight Memories" }, { name: "description", content: "写一封信，给下一位来到这里的陌生人。" }, { property: "og:title", content: "留给下一位" }, { property: "og:description", content: "写一封信，给下一位来到这里的陌生人。" }] }),
   component: Letters,
 });
 

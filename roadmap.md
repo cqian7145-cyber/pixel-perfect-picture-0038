@@ -1,5 +1,7 @@
 # Moonlight Memories roadmap
 
+- [ ] Optimize existing prototype functions: letter drawing, submission limits/settings, withdrawal, review feedback, story discovery and seven interactive demos; verify locally without provisioning a backend.
+
 - [x] Complete V3.3 product-only gap assessment and first-venue scope; report delivered in Files, without claiming PDF verification.
 - [ ] Compare product report against referenced V3.3 PDF when user supplies it.
 

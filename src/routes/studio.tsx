@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/studio")({
-  head: () => ({ meta: [{ title: "Memories Studio · Moonlight" }, { name: "description", content: "Moonlight Memories 商家后台原型。" }, { property: "og:title", content: "Memories Studio" }, { property: "og:description", content: "Moonlight Memories 商家后台原型。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Memories Studio · Moonlight" }, { name: "description", content: "Moonlight Memories 商家后台原型。" }, { property: "og:title", content: "Memories Studio" }, { property: "og:description", content: "Moonlight Memories 商家后台原型。" }] }),
   component: StudioLayout,
 });
 
@@ -24,7 +24,7 @@ function StudioLayout() {
           <Link to="/m/$venueSlug" params={{ venueSlug: "yeshi" }} className="whitespace-nowrap rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-accent">查看顾客端 ↗</Link>
         </nav>
       </aside>
-      <main className="flex-1 p-5 md:p-8"><Outlet /></main>
+      <main className="min-w-0 flex-1 p-5 md:p-8"><p className="mb-5 border-b border-border pb-3 text-sm text-muted-foreground">本地模拟 · 未上线 · 不具备正式店主权限保护，仅管理本浏览器的演示记录。</p><Outlet /></main>
     </div>
   );
 }
