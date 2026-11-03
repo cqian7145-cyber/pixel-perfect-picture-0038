@@ -3,7 +3,7 @@ import { repo } from "@/lib/memories/repository";
 import { CustomerShell, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/m/$venueSlug/stories/$storyId")({
-  head: () => ({ meta: [{ title: "故事 · Moonlight Memories" }, { name: "description", content: "一个发生在酒馆里的夜晚。" }, { property: "og:title", content: "故事 · Moonlight Memories" }, { property: "og:description", content: "一个发生在酒馆里的夜晚。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "故事 · Moonlight Memories" }, { name: "description", content: "一个发生在酒馆里的夜晚。" }, { property: "og:title", content: "故事 · Moonlight Memories" }, { property: "og:description", content: "一个发生在酒馆里的夜晚。" }] }),
   component: StoryPage,
 });
 

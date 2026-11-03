@@ -8,7 +8,7 @@ import type { Submission } from "@/lib/memories/types";
 import { Btn, CustomerShell, DemoBadge, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/m/$venueSlug/")({
-  head: () => ({ meta: [{ title: "门店记忆馆 · Moonlight Memories" }, { name: "description", content: "读一封过去的来信，留下今夜的一句话。" }, { property: "og:title", content: "门店记忆馆 · Moonlight Memories" }, { property: "og:description", content: "读一封过去的来信，留下今夜的一句话。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "门店记忆馆 · Moonlight Memories" }, { name: "description", content: "读一封过去的来信，留下今夜的一句话。" }, { property: "og:title", content: "门店记忆馆 · Moonlight Memories" }, { property: "og:description", content: "读一封过去的来信，留下今夜的一句话。" }] }),
   component: Home,
 });
 

@@ -4,7 +4,7 @@ import { repo } from "@/lib/memories/repository";
 import { Btn, CustomerShell, DemoBadge, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/m/$venueSlug/stories/")({
-  head: () => ({ meta: [{ title: "本店的故事 · Moonlight Memories" }, { name: "description", content: "这家酒馆里发生过的夜晚。" }, { property: "og:title", content: "本店的故事" }, { property: "og:description", content: "这家酒馆里发生过的夜晚。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "本店的故事 · Moonlight Memories" }, { name: "description", content: "这家酒馆里发生过的夜晚。" }, { property: "og:title", content: "本店的故事" }, { property: "og:description", content: "这家酒馆里发生过的夜晚。" }] }),
   component: Stories,
 });
 

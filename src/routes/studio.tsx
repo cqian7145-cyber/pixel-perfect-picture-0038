@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/studio")({
-  head: () => ({ meta: [{ title: "Memories Studio · Moonlight" }, { name: "description", content: "Moonlight Memories 商家后台原型。" }, { property: "og:title", content: "Memories Studio" }, { property: "og:description", content: "Moonlight Memories 商家后台原型。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "Memories Studio · Moonlight" }, { name: "description", content: "Moonlight Memories 商家后台原型。" }, { property: "og:title", content: "Memories Studio" }, { property: "og:description", content: "Moonlight Memories 商家后台原型。" }] }),
   component: StudioLayout,
 });
 

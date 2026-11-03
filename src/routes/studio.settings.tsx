@@ -5,7 +5,7 @@ import type { VenueSettings } from "@/lib/memories/types";
 import { Btn, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/studio/settings")({
-  head: () => ({ meta: [{ title: "基础设置 · Memories Studio" }, { name: "description", content: "记忆馆基础设置。" }, { property: "og:title", content: "基础设置" }, { property: "og:description", content: "记忆馆基础设置。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "基础设置 · Memories Studio" }, { name: "description", content: "记忆馆基础设置。" }, { property: "og:title", content: "基础设置" }, { property: "og:description", content: "记忆馆基础设置。" }] }),
   component: Settings,
 });
 

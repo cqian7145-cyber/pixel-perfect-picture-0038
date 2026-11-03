@@ -5,7 +5,7 @@ import type { ReviewStatus } from "@/lib/memories/types";
 import { Btn, ErrorNote, Loading, StatusBadge, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/studio/review")({
-  head: () => ({ meta: [{ title: "内容审核 · Memories Studio" }, { name: "description", content: "审核顾客投稿。" }, { property: "og:title", content: "内容审核" }, { property: "og:description", content: "审核顾客投稿。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "内容审核 · Memories Studio" }, { name: "description", content: "审核顾客投稿。" }, { property: "og:title", content: "内容审核" }, { property: "og:description", content: "审核顾客投稿。" }] }),
   component: Review,
 });
 

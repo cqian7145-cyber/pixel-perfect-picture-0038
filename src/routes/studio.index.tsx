@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { repo } from "@/lib/memories/repository";
-import { DemoBadge, Loading, useLoad } from "@/components/memories/ui";
+import { DemoBadge, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/studio/")({
   head: () => ({ meta: [{ title: "概览 · Memories Studio" }, { name: "description", content: "门店记忆馆数据概览。" }, { property: "og:title", content: "概览 · Memories Studio" }, { property: "og:description", content: "门店记忆馆数据概览。" }] }),
@@ -8,7 +8,8 @@ export const Route = createFileRoute("/studio/")({
 });
 
 function Overview() {
-  const { data } = useLoad(() => repo.listForReview("yeshi"), []);
+  const { data, error, reload } = useLoad(() => repo.listForReview("yeshi"), []);
+  if (error) return <ErrorNote msg={error} onRetry={reload} />;
   if (!data) return <Loading />;
   const c = (st: string) => data.filter((s) => s.status === st).length;
   const cards = [["待审核", c("pending")], ["已公开", c("approved")], ["未通过", c("rejected")], ["已撤回", c("withdrawn")]] as const;

@@ -5,7 +5,7 @@ import { MAX_LENGTH, repo } from "@/lib/memories/repository";
 import { Btn, CustomerShell, DemoBadge, ErrorNote, Loading, MockBadge, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/m/$venueSlug/experiences/$type")({
-  head: () => ({ meta: [{ title: "记忆玩法 · Moonlight Memories" }, { name: "description", content: "Moonlight Memories 互动玩法演示。" }, { property: "og:title", content: "记忆玩法 · Moonlight Memories" }, { property: "og:description", content: "Moonlight Memories 互动玩法演示。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "记忆玩法 · Moonlight Memories" }, { name: "description", content: "Moonlight Memories 互动玩法演示。" }, { property: "og:title", content: "记忆玩法 · Moonlight Memories" }, { property: "og:description", content: "Moonlight Memories 互动玩法演示。" }] }),
   component: ExperiencePage,
 });
 

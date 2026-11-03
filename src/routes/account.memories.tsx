@@ -4,7 +4,7 @@ import { repo } from "@/lib/memories/repository";
 import { Btn, ErrorNote, Loading, StatusBadge, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/account/memories")({
-  head: () => ({ meta: [{ title: "我的记忆 · Moonlight Memories" }, { name: "description", content: "查看你留下的句子与来信。" }, { property: "og:title", content: "我的记忆" }, { property: "og:description", content: "查看你留下的句子与来信。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "我的记忆 · Moonlight Memories" }, { name: "description", content: "查看你留下的句子与来信。" }, { property: "og:title", content: "我的记忆" }, { property: "og:description", content: "查看你留下的句子与来信。" }] }),
   component: Mine,
 });
 
