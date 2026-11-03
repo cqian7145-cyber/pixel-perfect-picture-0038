@@ -7,6 +7,7 @@ import type { NewSubmission, ReviewStatus, Story, Submission, Venue, VenueSettin
  * 后续：RemoteMemoriesRepository 调用服务端 API（匿名会话由服务端签发，密钥不进入浏览器）。
  */
 export interface MemoriesRepository {
+  getExperienceScenes(slug: string): Promise<{ tables: Record<number, string>; timeline: { date: string; title: string; isDemo: boolean }[]; stops: { title: string; text: string; isDemo: boolean }[] }>;
   getVenue(slug: string): Promise<Venue | null>;
   listStories(slug: string): Promise<Story[]>;
   getStory(slug: string, id: string): Promise<Story | null>;
@@ -51,6 +52,14 @@ function save(s: Store) {
 const delay = <T,>(v: T) => new Promise<T>((r) => setTimeout(() => r(v), 180));
 
 class MockMemoriesRepository implements MemoriesRepository {
+  async getExperienceScenes(slug: string) {
+    const stories = await this.listStories(slug);
+    return delay({
+      tables: { 1: "这里求过一次婚（演示）。她答应了，然后两个人都哭了。", 3: stories[0]?.excerpt ?? "暂无故事", 5: "常客每周五都坐这里，点同一杯金汤力（演示）。" },
+      timeline: stories.slice().sort((a, b) => a.date.localeCompare(b.date)).map(s => ({ date: s.date, title: s.title, isDemo: s.isDemo })),
+      stops: [{ title: "南明河", text: "河边的风把散场的人吹得很慢。", isDemo: true }, { title: "甲秀楼", text: stories[3]?.excerpt ?? "夜色里的城市。", isDemo: true }, { title: "青云路", text: "凌晨两点，街边的灯还亮着。", isDemo: true }, { title: "回到小馆", text: "灯还亮着。", isDemo: true }],
+    });
+  }
   async getVenue(slug: string) {
     const venue = DEMO_VENUES.find((v) => v.slug === slug);
     return delay(venue ? { ...venue, name: (await this.getSettings(slug)).displayName } : null);
