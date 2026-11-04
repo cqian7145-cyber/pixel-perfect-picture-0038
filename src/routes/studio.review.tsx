@@ -21,7 +21,12 @@ function Review() {
   async function decide(id: string, status: "approved" | "rejected", reason?: string) {
     if (busy) return;
     setBusy(id); setActionError(null);
-    try { await repo.review(id, status, reason); setRejecting(null); reload(); }
+    try {
+      await repo.review(id, status, reason);
+      const submission = data?.find(s => s.id === id);
+      if (submission) window.__lovableEvents?.track?.("project.submission_reviewed", { outcome: status, kind: submission.kind, is_demo: submission.isDemo, storage_mode: "local_mock" });
+      setRejecting(null); reload();
+    }
     catch (e) { setActionError(e instanceof Error ? e.message : "审核失败，请重试。"); }
     finally { setBusy(null); }
   }

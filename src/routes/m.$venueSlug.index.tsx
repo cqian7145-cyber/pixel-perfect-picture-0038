@@ -65,7 +65,7 @@ export function VenueHome({ venueSlug }: { venueSlug: string }) {
         {letter && <article className="paper-card envelope-open mt-5 p-6 md:p-8"><p className="mb-4 text-xs text-paper-muted">一封留给你的信 · {letter.isDemo && "演示内容"}</p><p className="font-serif text-lg leading-8">{letter.content}</p><div className="mt-5 flex items-center justify-between"><span className="text-sm text-paper-muted">—— {letter.penName}</span><Btn variant="ghost" onClick={draw}>再读一封 <ArrowRight size={16} className="ml-2" /></Btn></div><Link to="/m/$venueSlug/letters" params={{ venueSlug }} className="mt-4 inline-block text-sm underline underline-offset-4">写一封，留给下一位</Link></article>}
         {letter === null && <p className="py-5 text-sm text-muted-foreground">信箱暂时是空的，做第一个写信的人吧。</p>}
         <nav className="mt-3 grid grid-cols-3 gap-3 md:mt-5 md:gap-5">
-          <Link to="/m/$venueSlug/activities" params={{ venueSlug }} className="paper-card secondary-paper"><Music2 size={22} strokeWidth={1} /><h2>今晚的活动</h2><p>音乐 · 相遇</p><ArrowRight size={16} /></Link>
+          <Link to="/m/$venueSlug/activities" params={{ venueSlug }} onClick={() => { window.__lovableEvents?.track?.("lovable.interaction", { action: "open_activity", target: "tonight_activity" }); }} className="paper-card secondary-paper"><Music2 size={22} strokeWidth={1} /><h2>今晚的活动</h2><p>音乐 · 相遇</p><ArrowRight size={16} /></Link>
           <Link to="/m/$venueSlug/stories" params={{ venueSlug }} className="paper-card secondary-paper"><BookOpen size={22} strokeWidth={1} /><h2>本店的故事</h2><p>关于这盏灯</p><ArrowRight size={16} /></Link>
           <Link to="/account/memories" className="paper-card secondary-paper"><Bookmark size={22} strokeWidth={1} /><h2>我的记忆</h2><p>我留下的来信</p><ArrowRight size={16} /></Link>
         </nav>

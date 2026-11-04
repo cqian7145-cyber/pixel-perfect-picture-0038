@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "events": {
+    "project.friend_round_revealed": {
+      "event_schema_version": 1,
+      "description": "Both friends finished choosing and jointly revealed their answers; records no answers or compatibility results.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "is_demo"
+        ],
+        "properties": {
+          "is_demo": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "project.submission_reviewed": {
+      "event_schema_version": 1,
+      "description": "A pending submission was successfully approved or rejected in the local prototype review flow.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "outcome",
+          "kind",
+          "is_demo",
+          "storage_mode"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "rejected"
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "note",
+              "letter"
+            ]
+          },
+          "is_demo": {
+            "type": "boolean"
+          },
+          "storage_mode": {
+            "type": "string",
+            "enum": [
+              "local_mock"
+            ]
+          }
+        }
+      }
+    },
+    "project.submission_withdrawn": {
+      "event_schema_version": 1,
+      "description": "The author successfully withdrew a submission, excluding confirmation opens, cancellations and failed withdrawals.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "previous_status",
+          "is_demo",
+          "storage_mode"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "note",
+              "letter"
+            ]
+          },
+          "previous_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "approved",
+              "rejected"
+            ]
+          },
+          "is_demo": {
+            "type": "boolean"
+          },
+          "storage_mode": {
+            "type": "string",
+            "enum": [
+              "local_mock"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
