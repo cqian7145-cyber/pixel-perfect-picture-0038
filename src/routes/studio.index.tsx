@@ -3,7 +3,7 @@ import { repo } from "@/lib/memories/repository";
 import { DemoBadge, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/studio/")({
-  head: () => ({ meta: [{ title: "概览 · Memories Studio" }, { name: "description", content: "门店记忆馆数据概览。" }, { property: "og:title", content: "概览 · Memories Studio" }, { property: "og:description", content: "门店记忆馆数据概览。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "概览 · Memories Studio" }, { name: "description", content: "门店记忆馆数据概览。" }, { property: "og:title", content: "概览 · Memories Studio" }, { property: "og:description", content: "门店记忆馆数据概览。" }] }),
   component: Overview,
 });
 

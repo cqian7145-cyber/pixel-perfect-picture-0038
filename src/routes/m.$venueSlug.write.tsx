@@ -4,7 +4,7 @@ import { SubmitForm } from "@/components/memories/SubmitForm";
 import { CustomerShell, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/m/$venueSlug/write")({
-  head: () => ({ meta: [{ title: "今夜留一句 · Moonlight Memories" }, { name: "description", content: "写下今晚的一句话。" }, { property: "og:title", content: "今夜留一句" }, { property: "og:description", content: "写下今晚的一句话。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "今夜留一句 · Moonlight Memories" }, { name: "description", content: "写下今晚的一句话。" }, { property: "og:title", content: "今夜留一句" }, { property: "og:description", content: "写下今晚的一句话。" }] }),
   component: Write,
 });
 

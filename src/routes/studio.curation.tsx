@@ -4,7 +4,7 @@ import { repo } from "@/lib/memories/repository";
 import { DemoBadge, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/studio/curation")({
-  head: () => ({ meta: [{ title: "故事精选 · Memories Studio" }, { name: "description", content: "选择在记忆馆首页展示的故事。" }, { property: "og:title", content: "故事精选" }, { property: "og:description", content: "选择在记忆馆首页展示的故事。" }] }),
+  head: () => ({ meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { title: "故事精选 · Memories Studio" }, { name: "description", content: "选择在记忆馆首页展示的故事。" }, { property: "og:title", content: "故事精选" }, { property: "og:description", content: "选择在记忆馆首页展示的故事。" }] }),
   component: Curation,
 });
 

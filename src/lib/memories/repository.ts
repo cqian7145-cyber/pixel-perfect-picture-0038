@@ -40,7 +40,7 @@ const KEY = "moonlight-memories-mock-v1";
 interface Store { submissions: Submission[]; mine: string[]; featured: Record<string, boolean>; settings: Record<string, VenueSettings> }
 
 function load(): Store {
-  const fresh: Store = { submissions: [...DEMO_SUBMISSIONS], mine: [], featured: {}, settings: {} };
+  const fresh: Store = { submissions: DEMO_SUBMISSIONS.map(s => ({ ...s })), mine: [], featured: {}, settings: {} };
   if (typeof window === "undefined") return fresh;
   try { const raw = localStorage.getItem(KEY); return raw ? { ...fresh, ...JSON.parse(raw) } : fresh; } catch { return fresh; }
 }
@@ -53,6 +53,7 @@ const delay = <T,>(v: T) => new Promise<T>((r) => setTimeout(() => r(v), 180));
 
 class MockMemoriesRepository implements MemoriesRepository {
   async getExperienceScenes(slug: string) {
+    if (!DEMO_VENUES.some(v => v.slug === slug)) return delay({ tables: {}, timeline: [], stops: [] });
     const stories = await this.listStories(slug);
     return delay({
       tables: { 1: "这里求过一次婚（演示）。她答应了，然后两个人都哭了。", 3: stories[0]?.excerpt ?? "暂无故事", 5: "常客每周五都坐这里，点同一杯金汤力（演示）。" },
@@ -104,7 +105,10 @@ class MockMemoriesRepository implements MemoriesRepository {
     s.status = status; if (reason) s.rejectReason = reason; else delete s.rejectReason;
     save(st); return delay(undefined);
   }
-  async setFeatured(storyId: string, featured: boolean) { const st = load(); st.featured[storyId] = featured; save(st); return delay(undefined); }
+  async setFeatured(storyId: string, featured: boolean) {
+    if (!DEMO_STORIES.some(s => s.id === storyId)) throw new Error("故事不存在或已下架。");
+    const st = load(); st.featured[storyId] = featured; save(st); return delay(undefined);
+  }
   async getSettings(slug: string) {
     const v = DEMO_VENUES.find((x) => x.slug === slug);
     return delay(load().settings[slug] ?? { requireReview: true as const, allowLetters: true, allowNotes: true, maxLength: MAX_LENGTH, displayName: v?.name ?? slug });

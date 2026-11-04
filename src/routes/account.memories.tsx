@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { repo } from "@/lib/memories/repository";
 import { Btn, ErrorNote, Loading, StatusBadge, useLoad } from "@/components/memories/ui";
 
@@ -9,8 +9,10 @@ export const Route = createFileRoute("/account/memories")({
 });
 
 function Mine() {
-  // 原型：模拟登录。真实认证由现有 Moonlight 账号体系提供，未登录绝不展示任何数据。
+  // Device-only prototype access is not authentication.
   const [signedIn, setSignedIn] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   return (
     <div className="min-h-screen bg-night">
       <main className="mx-auto max-w-xl px-4 py-8">
@@ -18,9 +20,9 @@ function Mine() {
         <h1 className="mt-4 text-2xl">我的记忆</h1>
         {!signedIn ? (
           <div className="mt-8 rounded-xl bg-card p-6 text-center">
-            <p>登录后查看你的投稿与审核状态。</p>
-            <p className="mt-2 text-xs text-muted-foreground">原型阶段为模拟登录，仅显示本设备上的投稿。</p>
-            <Btn className="mt-5" onClick={() => setSignedIn(true)}>模拟登录</Btn>
+            <p>查看本设备上留下的句子与来信。</p>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">本地模拟，非正式账号；同一浏览器的使用者也可查看，请勿填写隐私信息。</p>
+            <Btn disabled={!ready} className="mt-5" onClick={() => setSignedIn(true)}>{ready ? "查看本设备记录" : "正在准备…"}</Btn>
           </div>
         ) : <MineList onSignOut={() => setSignedIn(false)} />}
       </main>
@@ -50,7 +52,7 @@ function MineList({ onSignOut }: { onSignOut: () => void }) {
           </li>
         ))}</ul>
       )}
-      <Btn variant="ghost" className="mt-6" onClick={onSignOut}>退出</Btn>
+      <Btn variant="ghost" className="mt-6" onClick={onSignOut}>关闭记录</Btn>
     </div>
   );
 }

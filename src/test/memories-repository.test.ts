@@ -53,5 +53,6 @@ describe("Memory submission rules", () => {
   it("isolates public content between venues", async () => {
     expect(await repo.listApproved("other-venue", "letter")).toEqual([]);
     expect(await repo.getStory("other-venue", "s1")).toBeNull();
+    expect(await repo.getExperienceScenes("other-venue")).toEqual({ tables: {}, timeline: [], stops: [] });
   });
 });
