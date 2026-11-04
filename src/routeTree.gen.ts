@@ -17,6 +17,7 @@ import { Route as StudioCurationRouteImport } from './routes/studio.curation'
 import { Route as StudioReviewRouteImport } from './routes/studio.review'
 import { Route as StudioSettingsRouteImport } from './routes/studio.settings'
 import { Route as MVenueSlugIndexRouteImport } from './routes/m.$venueSlug.index'
+import { Route as MVenueSlugActivitiesRouteImport } from './routes/m.$venueSlug.activities'
 import { Route as MVenueSlugLettersRouteImport } from './routes/m.$venueSlug.letters'
 import { Route as MVenueSlugWriteRouteImport } from './routes/m.$venueSlug.write'
 import { Route as MVenueSlugExperiencesTypeRouteImport } from './routes/m.$venueSlug.experiences.$type'
@@ -63,6 +64,11 @@ const MVenueSlugIndexRoute = MVenueSlugIndexRouteImport.update({
   path: '/m/$venueSlug/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MVenueSlugActivitiesRoute = MVenueSlugActivitiesRouteImport.update({
+  id: '/m/$venueSlug/activities',
+  path: '/m/$venueSlug/activities',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MVenueSlugLettersRoute = MVenueSlugLettersRouteImport.update({
   id: '/m/$venueSlug/letters',
   path: '/m/$venueSlug/letters',
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/studio/review': typeof StudioReviewRoute
   '/studio/settings': typeof StudioSettingsRoute
   '/studio/': typeof StudioIndexRoute
+  '/m/$venueSlug/activities': typeof MVenueSlugActivitiesRoute
   '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
   '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
   '/m/$venueSlug/': typeof MVenueSlugIndexRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/studio/review': typeof StudioReviewRoute
   '/studio/settings': typeof StudioSettingsRoute
   '/studio': typeof StudioIndexRoute
+  '/m/$venueSlug/activities': typeof MVenueSlugActivitiesRoute
   '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
   '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
   '/m/$venueSlug': typeof MVenueSlugIndexRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/studio/review': typeof StudioReviewRoute
   '/studio/settings': typeof StudioSettingsRoute
   '/studio/': typeof StudioIndexRoute
+  '/m/$venueSlug/activities': typeof MVenueSlugActivitiesRoute
   '/m/$venueSlug/letters': typeof MVenueSlugLettersRoute
   '/m/$venueSlug/write': typeof MVenueSlugWriteRoute
   '/m/$venueSlug/': typeof MVenueSlugIndexRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/studio/review'
     | '/studio/settings'
     | '/studio/'
+    | '/m/$venueSlug/activities'
     | '/m/$venueSlug/letters'
     | '/m/$venueSlug/write'
     | '/m/$venueSlug/'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/studio/review'
     | '/studio/settings'
     | '/studio'
+    | '/m/$venueSlug/activities'
     | '/m/$venueSlug/letters'
     | '/m/$venueSlug/write'
     | '/m/$venueSlug'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/studio/review'
     | '/studio/settings'
     | '/studio/'
+    | '/m/$venueSlug/activities'
     | '/m/$venueSlug/letters'
     | '/m/$venueSlug/write'
     | '/m/$venueSlug/'
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StudioRoute: typeof StudioRouteWithChildren
   AccountMemoriesRoute: typeof AccountMemoriesRoute
+  MVenueSlugActivitiesRoute: typeof MVenueSlugActivitiesRoute
   MVenueSlugLettersRoute: typeof MVenueSlugLettersRoute
   MVenueSlugWriteRoute: typeof MVenueSlugWriteRoute
   MVenueSlugIndexRoute: typeof MVenueSlugIndexRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MVenueSlugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/m/$venueSlug/activities': {
+      id: '/m/$venueSlug/activities'
+      path: '/m/$venueSlug/activities'
+      fullPath: '/m/$venueSlug/activities'
+      preLoaderRoute: typeof MVenueSlugActivitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/m/$venueSlug/letters': {
       id: '/m/$venueSlug/letters'
       path: '/m/$venueSlug/letters'
@@ -312,6 +332,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StudioRoute: StudioRouteWithChildren,
   AccountMemoriesRoute: AccountMemoriesRoute,
+  MVenueSlugActivitiesRoute: MVenueSlugActivitiesRoute,
   MVenueSlugLettersRoute: MVenueSlugLettersRoute,
   MVenueSlugWriteRoute: MVenueSlugWriteRoute,
   MVenueSlugIndexRoute: MVenueSlugIndexRoute,

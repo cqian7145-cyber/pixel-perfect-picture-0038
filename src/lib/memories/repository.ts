@@ -40,7 +40,7 @@ const KEY = "moonlight-memories-mock-v1";
 interface Store { submissions: Submission[]; mine: string[]; featured: Record<string, boolean>; settings: Record<string, VenueSettings> }
 
 function load(): Store {
-  const fresh: Store = { submissions: [...DEMO_SUBMISSIONS], mine: [], featured: {}, settings: {} };
+  const fresh: Store = { submissions: DEMO_SUBMISSIONS.map(s => ({ ...s })), mine: [], featured: {}, settings: {} };
   if (typeof window === "undefined") return fresh;
   try { const raw = localStorage.getItem(KEY); return raw ? { ...fresh, ...JSON.parse(raw) } : fresh; } catch { return fresh; }
 }
