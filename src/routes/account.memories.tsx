@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { repo } from "@/lib/memories/repository";
 import { Btn, ErrorNote, Loading, StatusBadge, useLoad } from "@/components/memories/ui";
 
@@ -11,6 +11,8 @@ export const Route = createFileRoute("/account/memories")({
 function Mine() {
   // 原型：模拟登录。真实认证由现有 Moonlight 账号体系提供，未登录绝不展示任何数据。
   const [signedIn, setSignedIn] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   return (
     <div className="min-h-screen bg-night">
       <main className="mx-auto max-w-xl px-4 py-8">
@@ -20,7 +22,7 @@ function Mine() {
           <div className="mt-8 rounded-xl bg-card p-6 text-center">
             <p>登录后查看你的投稿与审核状态。</p>
             <p className="mt-2 text-xs text-muted-foreground">原型阶段为模拟登录，仅显示本设备上的投稿。</p>
-            <Btn className="mt-5" onClick={() => setSignedIn(true)}>模拟登录</Btn>
+            <Btn disabled={!ready} className="mt-5" onClick={() => setSignedIn(true)}>{ready ? "模拟登录" : "正在准备…"}</Btn>
           </div>
         ) : <MineList onSignOut={() => setSignedIn(false)} />}
       </main>
