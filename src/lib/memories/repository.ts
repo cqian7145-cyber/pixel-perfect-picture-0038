@@ -13,6 +13,8 @@ export interface MemoriesRepository {
   getStory(slug: string, id: string): Promise<Story | null>;
   listApproved(slug: string, kind: Submission["kind"]): Promise<Submission[]>;
   drawLetter(slug: string, excludeId?: string): Promise<Submission | null>;
+  /** 北极星：近 N 周被后来客人抽到的客人信件数（不含演示信、不含自己写的信），按周一起算 */
+  weeklyGuestLetterDraws(slug: string, weeks?: number): Promise<{ weekStart: string; count: number }[]>;
   submit(input: NewSubmission): Promise<Submission>;
   listMine(): Promise<Submission[]>;
   withdraw(id: string): Promise<void>;
@@ -37,7 +39,8 @@ export function validateSubmission(input: NewSubmission): string | null {
 }
 
 const KEY = "moonlight-memories-mock-v1";
-interface Store { submissions: Submission[]; mine: string[]; featured: Record<string, boolean>; settings: Record<string, VenueSettings> }
+interface DrawLog { slug: string; letterId: string; at: string }
+interface Store { draws?: DrawLog[]; submissions: Submission[]; mine: string[]; featured: Record<string, boolean>; settings: Record<string, VenueSettings> }
 
 function load(): Store {
   const fresh: Store = { submissions: DEMO_SUBMISSIONS.map(s => ({ ...s })), mine: [], featured: {}, settings: {} };
@@ -76,7 +79,15 @@ class MockMemoriesRepository implements MemoriesRepository {
   async drawLetter(slug: string, excludeId?: string) {
     const all = await this.listApproved(slug, "letter");
     const candidates = all.length > 1 ? all.filter((s) => s.id !== excludeId) : all;
-    return candidates[Math.floor(Math.random() * candidates.length)] ?? null;
+    const letter = candidates[Math.floor(Math.random() * candidates.length)] ?? null;
+    if (letter && !letter.isDemo) {
+      const st = load();
+      if (!st.mine.includes(letter.id)) { st.draws = [...(st.draws ?? []), { slug, letterId: letter.id, at: new Date().toISOString() }]; save(st); }
+    }
+    return letter;
+  }
+  async weeklyGuestLetterDraws(slug: string, weeks = 8, now = new Date()) {
+    return delay(weeklyBuckets((load().draws ?? []).filter(d => d.slug === slug).map(d => d.at), weeks, now));
   }
   async submit(input: NewSubmission) {
     const err = validateSubmission(input);
@@ -121,3 +132,14 @@ class MockMemoriesRepository implements MemoriesRepository {
 }
 
 export const repo: MemoriesRepository = new MockMemoriesRepository();
+
+/** 按周（周一 00:00 本地时间）统计，返回从旧到新 */
+export function weeklyBuckets(times: string[], weeks: number, now: Date) {
+  const monday = new Date(now); monday.setHours(0, 0, 0, 0); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  return Array.from({ length: weeks }, (_, i) => {
+    const start = new Date(monday); start.setDate(monday.getDate() - 7 * (weeks - 1 - i));
+    const end = new Date(start); end.setDate(start.getDate() + 7);
+    const count = times.filter(t => { const d = new Date(t); return d >= start && d < end; }).length;
+    return { weekStart: `${start.getMonth() + 1}/${start.getDate()}`, count };
+  });
+}

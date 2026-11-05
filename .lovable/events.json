@@ -60,6 +60,26 @@
         }
       }
     },
+    "project.guest_letter_drawn": {
+      "event_schema_version": 1,
+      "description": "A visitor successfully drew a letter on the venue home; is_demo=false means a real guest letter (north-star moment).",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "is_demo"
+        ],
+        "properties": {
+          "is_demo": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
     "project.submission_reviewed": {
       "event_schema_version": 1,
       "description": "A pending submission was successfully approved or rejected in the local prototype review flow.",
