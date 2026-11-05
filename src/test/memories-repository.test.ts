@@ -56,3 +56,11 @@ describe("Memory submission rules", () => {
     expect(await repo.getExperienceScenes("other-venue")).toEqual({ tables: {}, timeline: [], stops: [] });
   });
 });
+import { weeklyBuckets } from "@/lib/memories/repository";
+describe("weekly guest letter draws", () => {
+  it("counts draws per Monday-start week, oldest first", () => {
+    const now = new Date(2026, 10, 5, 20); // Thu Nov 5
+    const rows = weeklyBuckets([new Date(2026, 10, 2, 1).toISOString(), new Date(2026, 10, 4).toISOString(), new Date(2026, 10, 1, 23).toISOString()], 2, now);
+    expect(rows).toEqual([{ weekStart: "10/26", count: 1 }, { weekStart: "11/2", count: 2 }]);
+  });
+});

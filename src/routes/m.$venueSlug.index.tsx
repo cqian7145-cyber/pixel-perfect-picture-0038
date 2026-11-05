@@ -27,7 +27,7 @@ export function VenueHome({ venueSlug }: { venueSlug: string }) {
   async function draw() {
     if (opening) return;
     setOpening(true); setError(null);
-    try { setLetter(await repo.drawLetter(venueSlug, letter?.id)); }
+    try { const next = await repo.drawLetter(venueSlug, letter?.id); setLetter(next); if (next) window.__lovableEvents?.track?.("project.guest_letter_drawn", { is_demo: next.isDemo }); }
     catch (e) { setError(e instanceof Error ? e.message : "来信暂时没有送达，请重试。"); }
     finally { setOpening(false); }
   }
