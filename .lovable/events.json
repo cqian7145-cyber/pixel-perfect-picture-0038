@@ -1,6 +1,45 @@
 {
   "schema_version": 1,
   "events": {
+    "project.activity_step": {
+      "event_schema_version": 1,
+      "description": "A visitor reached a step of a venue activity (selected, started, answered, completed); stores no answers.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "activity",
+          "step",
+          "is_demo"
+        ],
+        "properties": {
+          "activity": {
+            "type": "string",
+            "enum": [
+              "quiet",
+              "friend_round"
+            ]
+          },
+          "step": {
+            "type": "string",
+            "enum": [
+              "selected",
+              "started",
+              "first_answered",
+              "second_answered",
+              "completed"
+            ]
+          },
+          "is_demo": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
     "project.friend_round_revealed": {
       "event_schema_version": 1,
       "description": "Both friends finished choosing and jointly revealed their answers; records no answers or compatibility results.",
