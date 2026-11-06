@@ -49,9 +49,7 @@ export function validateSubmission(input: NewSubmission): string | null {
 }
 
 export function localDay(d: Date) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
-export function isOpen(s: Submission, now = new Date()) { return !s.openOn || s.openOn <= localDay(now);
-  return null;
-}
+export function isOpen(s: Submission, now = new Date()) { return !s.openOn || s.openOn <= localDay(now); }
 
 const KEY = "moonlight-memories-mock-v1";
 interface DrawLog { slug: string; letterId: string; at: string }
@@ -97,13 +95,13 @@ class MockMemoriesRepository implements MemoriesRepository {
     if (!l || l.kind !== "letter" || l.status !== "approved") throw new Error("这封信已经不在信箱里了。");
     if (st.mine.includes(letterId)) throw new Error("这是你自己写的信。");
     const echoes = st.echoes ?? [];
-    if (echoes.some(e => e.letterId === letterId && e.mine)) throw new Error("你已经给这封信留过回音了。");
-    st.echoes = [...echoes, { id: crypto.randomUUID(), letterId, text, at: new Date().toISOString(), mine: true } as LetterEcho];
+    if (echoes.some(e => e.letterId === letterId)) throw new Error("你已经给这封信留过回音了。");
+    st.echoes = [...echoes, { id: crypto.randomUUID(), letterId, text, at: new Date().toISOString() }];
     save(st); return delay(undefined);
   }
   async listEchoesForMine() {
     const st = load();
-    return delay((st.echoes ?? []).filter(e => st.mine.includes(e.letterId)).map(({ id, letterId, text, at }) => ({ id, letterId, text, at })));
+    return delay((st.echoes ?? []).filter(e => st.mine.includes(e.letterId)));
   }
   async drawLetter(slug: string, excludeId?: string, mood?: LetterMood) {
     const all = (await this.listApproved(slug, "letter")).filter(s => !mood || s.mood === mood);
