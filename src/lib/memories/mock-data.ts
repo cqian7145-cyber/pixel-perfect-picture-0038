@@ -41,8 +41,8 @@ export const DEMO_STORIES: Story[] = [
 export const DEMO_SUBMISSIONS: Submission[] = [
   { id: "d1", venueSlug: "yeshi", kind: "note", content: "今天终于把辞职信交了，这杯敬自己。", penName: "新的开始", consentPublicDisplay: true, status: "approved", createdAt: "2026-10-28T22:10:00Z", isDemo: true },
   { id: "d2", venueSlug: "yeshi", kind: "note", content: "隔壁桌的笑声好好听。", penName: "路过", consentPublicDisplay: true, status: "approved", createdAt: "2026-10-27T21:40:00Z", isDemo: true },
-  { id: "d3", venueSlug: "yeshi", kind: "letter", content: "给下一位坐在窗边的人：今晚的月亮很圆，记得抬头看一眼。", penName: "窗边的人", consentPublicDisplay: true, status: "approved", createdAt: "2026-10-20T23:00:00Z", isDemo: true },
-  { id: "d4", venueSlug: "yeshi", kind: "letter", content: "如果你今天不太开心，没关系，这里的灯一直亮到凌晨两点。", penName: "某个周三", consentPublicDisplay: true, status: "approved", createdAt: "2026-10-15T22:00:00Z", isDemo: true },
+  { id: "d3", venueSlug: "yeshi", kind: "letter", mood: "gentle", content: "给下一位坐在窗边的人：今晚的月亮很圆，记得抬头看一眼。", penName: "窗边的人", consentPublicDisplay: true, status: "approved", createdAt: "2026-10-20T23:00:00Z", isDemo: true },
+  { id: "d4", venueSlug: "yeshi", kind: "letter", mood: "courage", content: "如果你今天不太开心，没关系，这里的灯一直亮到凌晨两点。", penName: "某个周三", consentPublicDisplay: true, status: "approved", createdAt: "2026-10-15T22:00:00Z", isDemo: true },
   { id: "d5", venueSlug: "yeshi", kind: "note", content: "第一次一个人来喝酒，比想象中自在。", penName: "独酌", consentPublicDisplay: true, status: "pending", createdAt: "2026-10-30T13:00:00Z", isDemo: true },
   { id: "d6", venueSlug: "yeshi", kind: "letter", content: "加我微信 xxx，下次一起喝。", penName: "匿名", consentPublicDisplay: true, status: "pending", createdAt: "2026-10-30T12:00:00Z", isDemo: true },
 ];
