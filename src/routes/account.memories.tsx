@@ -32,6 +32,7 @@ function Mine() {
 
 function MineList({ onSignOut }: { onSignOut: () => void }) {
   const { data, error, reload } = useLoad(() => repo.listMine(), []);
+  const echoes = useLoad(() => repo.listEchoesForMine(), []);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -46,6 +47,8 @@ function MineList({ onSignOut }: { onSignOut: () => void }) {
           <li key={s.id} className="paper-card p-5">
             <div className="flex items-center justify-between text-xs text-paper-muted"><span>{s.kind === "note" ? "今夜留一句" : "留给下一位"} · {new Date(s.createdAt).toLocaleString("zh-CN")}</span><StatusBadge status={s.status} /></div>
             <p className="mt-3 font-serif leading-7">{s.content}</p>
+            {s.openOn && <p className="mt-2 text-xs text-paper-muted">定在 {s.openOn} 之后开启</p>}
+            {s.kind === "letter" && (echoes.data?.filter(e => e.letterId === s.id).length ?? 0) > 0 && <div className="mt-3 rounded-md bg-paper-text/5 p-3"><p className="text-xs text-paper-muted">后来的人给你的回音</p><ul className="mt-1 space-y-1">{echoes.data?.filter(e => e.letterId === s.id).map(e => <li key={e.id} className="font-serif text-sm">“{e.text}”</li>)}</ul></div>}
             {s.status === "rejected" && s.rejectReason && <p className="mt-2 text-sm text-paper-muted">未通过原因：{s.rejectReason}</p>}
             <p className="mt-2 text-xs text-paper-muted">授权：仅本店记忆馆匿名展示 · 不含商业广告</p>
             {s.status !== "withdrawn" && (confirmId === s.id ? <div className="mt-4"><p className="text-sm text-paper-muted">撤回后不再公开展示，且无法恢复。确定撤回？</p><div className="mt-3 flex gap-2"><Btn variant="danger" disabled={busy} onClick={async () => { if (busy) return; setBusy(true); setActionError(null); try { await repo.withdraw(s.id); window.__lovableEvents?.track?.("project.submission_withdrawn", { kind: s.kind, previous_status: s.status, is_demo: s.isDemo, storage_mode: "local_mock" }); setConfirmId(null); reload(); } catch (e) { setActionError(e instanceof Error ? e.message : "撤回失败，请重试。"); } finally { setBusy(false); } }}>{busy ? "撤回中…" : "确定撤回"}</Btn><Btn variant="ghost" disabled={busy} onClick={() => setConfirmId(null)}>保留</Btn></div></div> : <Btn variant="ghost" className="mt-3" onClick={() => setConfirmId(s.id)}>撤回</Btn>)}

@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, Mail, PenLine, Music2, BookOpen, Bookmark } f
 import tavernImage from "@/assets/tavern-night.jpg";
 import { repo } from "@/lib/memories/repository";
 import { EXPERIENCES } from "@/lib/memories/experiences";
-import type { Submission } from "@/lib/memories/types";
+import { ECHO_OPTIONS, LETTER_MOODS, type EchoText, type LetterMood, type Submission } from "@/lib/memories/types";
 import { Btn, CustomerShell, DemoBadge, ErrorNote, Loading, useLoad } from "@/components/memories/ui";
 
 export const Route = createFileRoute("/m/$venueSlug/")({
@@ -24,10 +24,18 @@ export function VenueHome({ venueSlug }: { venueSlug: string }) {
   const [letter, setLetter] = useState<Submission | null | undefined>();
   const [opening, setOpening] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mood, setMood] = useState<LetterMood | undefined>();
+  const [echoed, setEchoed] = useState<string | null>(null);
+  const [echoError, setEchoError] = useState<string | null>(null);
+  async function echo(text: EchoText) {
+    if (!letter) return; setEchoError(null);
+    try { await repo.echoLetter(letter.id, text); setEchoed(text); window.__lovableEvents?.track?.("lovable.interaction", { action: "echo_letter", target: "guest_letter" }); }
+    catch (e) { setEchoError(e instanceof Error ? e.message : "回音没有送出，请重试。"); }
+  }
   async function draw() {
     if (opening) return;
-    setOpening(true); setError(null);
-    try { const next = await repo.drawLetter(venueSlug, letter?.id); setLetter(next); if (next) window.__lovableEvents?.track?.("project.guest_letter_drawn", { is_demo: next.isDemo }); }
+    setOpening(true); setError(null); setEchoed(null); setEchoError(null);
+    try { const next = await repo.drawLetter(venueSlug, letter?.id, mood); setLetter(next); if (next) window.__lovableEvents?.track?.("project.guest_letter_drawn", { is_demo: next.isDemo }); }
     catch (e) { setError(e instanceof Error ? e.message : "来信暂时没有送达，请重试。"); }
     finally { setOpening(false); }
   }
@@ -61,9 +69,13 @@ export function VenueHome({ venueSlug }: { venueSlug: string }) {
             <PenLine className="mb-4 text-paper-muted" size={28} strokeWidth={1} /><h2 className="font-serif text-lg md:text-2xl">留下今夜的<br />一句话</h2><p className="mt-3 text-sm leading-6 text-paper-muted">把此刻的心情，<br />留给下一个陌生人。</p><ArrowRight size={19} className="ml-auto mt-3" />
           </Link>
         </div>
+        <div className="mt-4 flex flex-wrap items-center gap-2" role="group" aria-label="按心情抽信">
+          <span className="text-xs text-muted-foreground">今晚想读：</span>
+          {[{ id: undefined, label: "随便一封" }, ...LETTER_MOODS].map(m => <button key={m.label} type="button" aria-pressed={mood === m.id} onClick={() => setMood(m.id)} className={`min-h-9 rounded-full border px-3 text-xs ${mood === m.id ? "border-warm text-warm" : "border-border text-muted-foreground"}`}>{m.label}</button>)}
+        </div>
         {error && <div className="mt-4"><ErrorNote msg={error} onRetry={draw} /></div>}
-        {letter && <article className="paper-card envelope-open mt-5 p-6 md:p-8"><p className="mb-4 text-xs text-paper-muted">一封留给你的信 · {letter.isDemo && "演示内容"}</p><p className="font-serif text-lg leading-8">{letter.content}</p><div className="mt-5 flex items-center justify-between"><span className="text-sm text-paper-muted">—— {letter.penName}</span><Btn variant="ghost" onClick={draw}>再读一封 <ArrowRight size={16} className="ml-2" /></Btn></div><Link to="/m/$venueSlug/letters" params={{ venueSlug }} className="mt-4 inline-block text-sm underline underline-offset-4">写一封，留给下一位</Link></article>}
-        {letter === null && <p className="py-5 text-sm text-muted-foreground">信箱暂时是空的，做第一个写信的人吧。</p>}
+        {letter && <article className="paper-card envelope-open mt-5 p-6 md:p-8"><p className="mb-4 text-xs text-paper-muted">一封留给你的信 · {letter.isDemo && "演示内容"}</p><p className="font-serif text-lg leading-8">{letter.content}</p><div className="mt-5 flex items-center justify-between"><span className="text-sm text-paper-muted">—— {letter.penName}</span><Btn variant="ghost" onClick={draw}>再读一封 <ArrowRight size={16} className="ml-2" /></Btn></div><div className="mt-5 border-t border-paper-text/15 pt-4">{letter.isDemo ? <p className="text-xs text-paper-muted">演示信不接收回音。</p> : echoed ? <p className="text-sm text-paper-muted">已悄悄告诉写信的人：“{echoed}”。只有对方能看到。</p> : <><p className="text-xs text-paper-muted">给写信的人留个回音（只有对方能看到，不公开）</p><div className="mt-2 flex flex-wrap gap-2">{ECHO_OPTIONS.map(t => <button key={t} type="button" onClick={() => echo(t)} className="min-h-9 rounded-full border border-paper-text/25 px-3 text-xs">{t}</button>)}</div></>}{echoError && <p role="alert" className="mt-2 text-sm text-destructive">{echoError}</p>}</div><Link to="/m/$venueSlug/letters" params={{ venueSlug }} className="mt-4 inline-block text-sm underline underline-offset-4">写一封，留给下一位</Link></article>}
+        {letter === null && <p className="py-5 text-sm text-muted-foreground">{mood ? "这种心情的信还没有，换一种试试，或者写一封留给下一位。" : "信箱暂时是空的，做第一个写信的人吧。"}</p>}
         <nav className="mt-3 grid grid-cols-3 gap-3 md:mt-5 md:gap-5">
           <Link to="/m/$venueSlug/activities" params={{ venueSlug }} onClick={() => { window.__lovableEvents?.track?.("lovable.interaction", { action: "open_activity", target: "tonight_activity" }); }} className="paper-card secondary-paper"><Music2 size={22} strokeWidth={1} /><h2>今晚的活动</h2><p>音乐 · 相遇</p><ArrowRight size={16} /></Link>
           <Link to="/m/$venueSlug/stories" params={{ venueSlug }} className="paper-card secondary-paper"><BookOpen size={22} strokeWidth={1} /><h2>本店的故事</h2><p>关于这盏灯</p><ArrowRight size={16} /></Link>

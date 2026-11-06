@@ -1,5 +1,6 @@
 import { DEMO_STORIES, DEMO_SUBMISSIONS, DEMO_VENUES } from "./mock-data";
-import type { NewSubmission, ReviewStatus, Story, Submission, Venue, VenueSettings } from "./types";
+import { ECHO_OPTIONS } from "./types";
+import type { EchoText, LetterEcho, LetterMood, NewSubmission, ReviewStatus, Story, Submission, Venue, VenueSettings } from "./types";
 
 /**
  * Repository 接口：UI 只依赖此接口。
@@ -12,7 +13,10 @@ export interface MemoriesRepository {
   listStories(slug: string): Promise<Story[]>;
   getStory(slug: string, id: string): Promise<Story | null>;
   listApproved(slug: string, kind: Submission["kind"]): Promise<Submission[]>;
-  drawLetter(slug: string, excludeId?: string): Promise<Submission | null>;
+  drawLetter(slug: string, excludeId?: string, mood?: LetterMood): Promise<Submission | null>;
+  /** 读者给抽到的信留一个固定短句回音；仅作者本设备可见 */
+  echoLetter(letterId: string, text: EchoText): Promise<void>;
+  listEchoesForMine(): Promise<LetterEcho[]>;
   /** 北极星：近 N 周被后来客人抽到的客人信件数（不含演示信、不含自己写的信），按周一起算 */
   weeklyGuestLetterDraws(slug: string, weeks?: number): Promise<{ weekStart: string; count: number }[]>;
   submit(input: NewSubmission): Promise<Submission>;
@@ -35,12 +39,21 @@ export function validateSubmission(input: NewSubmission): string | null {
   if (/(微信|vx|wx|qq|电话|手机号|\d{7,})/i.test(input.penName)) return "笔名中请不要留下联系方式";
   if (input.penName.trim().length > 12) return "笔名最多 12 字";
   if (!input.consentPublicDisplay) return "请先确认展示授权";
+  if (input.openOn) {
+    if (input.kind !== "letter") return "只有来信可以定在某一天开启";
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(input.openOn) || isNaN(Date.parse(input.openOn))) return "开启日期格式不对";
+    if (input.openOn < localDay(new Date())) return "开启日期不能早于今天";
+    if (input.openOn > localDay(new Date(Date.now() + 366 * 864e5))) return "开启日期最远一年内";
+  }
   return null;
 }
 
+export function localDay(d: Date) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+export function isOpen(s: Submission, now = new Date()) { return !s.openOn || s.openOn <= localDay(now); }
+
 const KEY = "moonlight-memories-mock-v1";
 interface DrawLog { slug: string; letterId: string; at: string }
-interface Store { draws?: DrawLog[]; submissions: Submission[]; mine: string[]; featured: Record<string, boolean>; settings: Record<string, VenueSettings> }
+interface Store { echoes?: LetterEcho[]; draws?: DrawLog[]; submissions: Submission[]; mine: string[]; featured: Record<string, boolean>; settings: Record<string, VenueSettings> }
 
 function load(): Store {
   const fresh: Store = { submissions: DEMO_SUBMISSIONS.map(s => ({ ...s })), mine: [], featured: {}, settings: {} };
@@ -74,10 +87,24 @@ class MockMemoriesRepository implements MemoriesRepository {
   }
   async getStory(slug: string, id: string) { return delay((await this.listStories(slug)).find((s) => s.id === id) ?? null); }
   async listApproved(slug: string, kind: Submission["kind"]) {
-    return delay(load().submissions.filter((s) => s.venueSlug === slug && s.kind === kind && s.status === "approved" && s.consentPublicDisplay));
+    return delay(load().submissions.filter((s) => s.venueSlug === slug && s.kind === kind && s.status === "approved" && s.consentPublicDisplay && isOpen(s)));
   }
-  async drawLetter(slug: string, excludeId?: string) {
-    const all = await this.listApproved(slug, "letter");
+  async echoLetter(letterId: string, text: EchoText) {
+    if (!ECHO_OPTIONS.includes(text)) throw new Error("请从给出的回音里选一句。");
+    const st = load(); const l = st.submissions.find(s => s.id === letterId);
+    if (!l || l.kind !== "letter" || l.status !== "approved") throw new Error("这封信已经不在信箱里了。");
+    if (st.mine.includes(letterId)) throw new Error("这是你自己写的信。");
+    const echoes = st.echoes ?? [];
+    if (echoes.some(e => e.letterId === letterId)) throw new Error("你已经给这封信留过回音了。");
+    st.echoes = [...echoes, { id: crypto.randomUUID(), letterId, text, at: new Date().toISOString() }];
+    save(st); return delay(undefined);
+  }
+  async listEchoesForMine() {
+    const st = load();
+    return delay((st.echoes ?? []).filter(e => st.mine.includes(e.letterId)));
+  }
+  async drawLetter(slug: string, excludeId?: string, mood?: LetterMood) {
+    const all = (await this.listApproved(slug, "letter")).filter(s => !mood || s.mood === mood);
     const candidates = all.length > 1 ? all.filter((s) => s.id !== excludeId) : all;
     const letter = candidates[Math.floor(Math.random() * candidates.length)] ?? null;
     if (letter && !letter.isDemo) {
@@ -96,7 +123,7 @@ class MockMemoriesRepository implements MemoriesRepository {
     const settings = await this.getSettings(input.venueSlug);
     if (input.kind === "note" ? !settings.allowNotes : !settings.allowLetters) throw new Error("店主暂时关闭了此信箱，仍可阅读已公开的内容。");
     const st = load();
-    const sub: Submission = { ...input, content: input.content.trim(), penName: input.penName.trim() || "匿名", id: crypto.randomUUID(), status: "pending", createdAt: new Date().toISOString(), isDemo: false };
+    const sub: Submission = { ...input, mood: input.kind === "letter" ? input.mood : undefined, openOn: input.kind === "letter" && input.openOn ? input.openOn : undefined, content: input.content.trim(), penName: input.penName.trim() || "匿名", id: crypto.randomUUID(), status: "pending", createdAt: new Date().toISOString(), isDemo: false };
     st.submissions.unshift(sub); st.mine.unshift(sub.id); save(st);
     return delay(sub);
   }
