@@ -37,9 +37,9 @@ export interface Submission {
   createdAt: string;
   isDemo: boolean;
   /** 仅「留给下一位」：信的心情，用于按心情抽信 */
-  mood?: LetterMood;
+  mood?: LetterMood | undefined;
   /** 仅「留给下一位」：YYYY-MM-DD，到这天才可能被抽到 */
-  openOn?: string;
+  openOn?: string | undefined;
 }
 
 export type LetterMood = "gentle" | "courage" | "quiet" | "missing";
@@ -52,8 +52,8 @@ export type EchoText = (typeof ECHO_OPTIONS)[number];
 export interface LetterEcho { id: string; letterId: string; text: EchoText; at: string }
 
 export interface NewSubmission {
-  mood?: LetterMood;
-  openOn?: string;
+  mood?: LetterMood | undefined;
+  openOn?: string | undefined;
   venueSlug: string;
   kind: "note" | "letter";
   content: string;
